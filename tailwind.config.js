@@ -17,11 +17,10 @@ module.exports = {
         'accent-orange': '#F6CF68',
         'accent-green': '#C2E9B4',
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
+      backgroundImage: (theme) => ({
+        'gradient-gradual':
+          'linear-gradient(180deg, rgba(116, 116, 116, 0) 66.15%, #000000 100%)',
+      }),
       screens: {
         xs: '480px',
         sm: '768px',
@@ -29,5 +28,8 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/typography'),
+  ],
 };
