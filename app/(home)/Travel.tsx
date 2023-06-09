@@ -12,6 +12,12 @@ const Travel = ({ travelPosts }: Props) => {
   return (
     <section className="mt-10">
       <hr className="border-1" />
+      <div className="flex items-center gap-3 my-8">
+        <h4 className="bg-accent-green px-5 py-2 text-wh-900 font-bold">
+          TRAVEL
+        </h4>
+        <p className="font-bold text-2xl">New Travel Experiences</p>
+      </div>
       <div className="sm:grid grid-cols-3 grid-rows-2 gap-3 my-8">
         <Card
           post={travelPosts[0]}

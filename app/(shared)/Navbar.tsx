@@ -23,7 +23,11 @@ const Navbar = (props: Props) => {
       </nav>
       <div className="flex justify-between gap-8 mt-5 mb-4 mx-10">
         <div className="basis-full text-center xs:text-left xs:basis-2/5 ">
-          <h1 className="font-bold text-3xl md:text-5xl">BLOG OF THE FUTURE</h1>
+          <Link href="/">
+            <h1 className="font-bold text-3xl md:text-5xl">
+              BLOG OF THE FUTURE
+            </h1>
+          </Link>
           <p className="text-sm mt-3">
             Blog dedicated towards AI and generations and job automation
           </p>

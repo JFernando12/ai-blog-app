@@ -32,7 +32,7 @@ const Card = ({
     <div className={className}>
       <Link
         href={`${process.env.NEXT_PUBLIC_URL}/post/${id}`}
-        className="basis-1/2"
+        className="basis-1/2 hover:opacity-70"
       >
         <div className={`${imageHeight} relative`}>
           <Image
