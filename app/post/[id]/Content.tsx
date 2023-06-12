@@ -42,18 +42,26 @@ const Content = ({ post }: Props) => {
     day: 'numeric',
   });
 
+  const handleIsEditable = (boolean: boolean) => {
+    setIsEditable(boolean);
+  };
+
   return (
     <div>
       {/* Migas de pan */}
       <h5 className="text-wh-300">{`Home > ${post.category} > ${post.title}`}</h5>
       {/* Contenido del post */}
-      <CategoryAndEdit post={post} />
+      <CategoryAndEdit
+        post={post}
+        isEditable={isEditable}
+        handleIsEditable={handleIsEditable}
+      />
       <form action="">
         {/* Header */}
         <div>
           {isEditable ? (
             <div>
-              <textarea />
+              <textarea className="w-full bg-wh-50 border-2 rounded-md p-3" />
             </div>
           ) : (
             <h3 className="font-bold text-3xl mt-3">{post.title}</h3>

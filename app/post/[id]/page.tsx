@@ -34,7 +34,7 @@ const Post = async ({ params }: Props) => {
   }
 
   return (
-    <main>
+    <main className="px-10 leading-7">
       <Content post={post} />
     </main>
   );

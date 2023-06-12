@@ -26,13 +26,17 @@ const Article = ({ editor, isEditable }: Props) => {
           </div>
         </div>
       )}
-      {isEditable && (
-        <>
-          <EditorMenuBar editor={editor} />
-          <hr className="border-1 mt-2 mb-5" />
-        </>
-      )}
-      <EditorContent editor={editor} />
+      <div
+        className={isEditable ? 'border-2 rounded-md p-3 bg-wh-50' : 'w-full'}
+      >
+        {isEditable && (
+          <>
+            <EditorMenuBar editor={editor} />
+            <hr className="border-1 mt-2 mb-5" />
+          </>
+        )}
+        <EditorContent editor={editor} />
+      </div>
     </article>
   );
 };
