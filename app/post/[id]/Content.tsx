@@ -2,15 +2,39 @@
 import { Post } from '@prisma/client';
 import React, { useState } from 'react';
 import CategoryAndEdit from './CategoryAndEdit';
+import Article from './Article';
 import { PostFormatted } from '@/app/types';
 import Image from 'next/image';
+import { Editor, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import SocialLinks from '@/app/(shared)/SocialLinks';
 
 type Props = {
   post: PostFormatted;
 };
 
 const Content = ({ post }: Props) => {
-  const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [isEditable, setIsEditable] = useState<boolean>(true);
+  const [content, setContent] = useState<string>(post.content);
+  const [contentError, setContentError] = useState<string>('');
+
+  const handleOnChangeContent = ({ editor }: any) => {
+    if (!(editor as Editor).isEmpty) setContentError('');
+    setContent((editor as Editor).getHTML());
+  };
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    onUpdate: handleOnChangeContent,
+    editorProps: {
+      attributes: {
+        class:
+          'prose prose-sm xl:prose-2xl leading-8 focus:outline-none w-full max-w-full',
+      },
+    },
+    content: content,
+    editable: isEditable,
+  });
 
   const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -48,7 +72,23 @@ const Content = ({ post }: Props) => {
             style={{ objectFit: 'cover' }}
           />
         </div>
+        {/* Body */}
+        <Article editor={editor} isEditable={isEditable} />
+        {isEditable && (
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-accent-red hover:bg-wh-500 text-wh-10 font-semibold py-2 px-4 mt-5"
+            >
+              SUBMIT
+            </button>
+          </div>
+        )}
       </form>
+
+      <div className="hidden md:block mt-10 w-1/3">
+        <SocialLinks isDark />
+      </div>
     </div>
   );
 };
