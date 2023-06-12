@@ -1,5 +1,4 @@
 'use client';
-import { Post } from '@prisma/client';
 import React, { useState } from 'react';
 import CategoryAndEdit from './CategoryAndEdit';
 import Article from './Article';
@@ -14,9 +13,20 @@ type Props = {
 };
 
 const Content = ({ post }: Props) => {
-  const [isEditable, setIsEditable] = useState<boolean>(true);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
   const [content, setContent] = useState<string>(post.content);
   const [contentError, setContentError] = useState<string>('');
+
+  const [tempTitle, setTempTitle] = useState<string>(post.title);
+  const [tempContent, setTempContent] = useState<string>(post.content);
+
+  const [title, setTitle] = useState<string>(post.title);
+
+  const handleOnChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    if (e.target.value === '') setContentError('Title is required');
+    setTitle(e.target.value);
+  };
 
   const handleOnChangeContent = ({ editor }: any) => {
     if (!(editor as Editor).isEmpty) setContentError('');
@@ -44,6 +54,33 @@ const Content = ({ post }: Props) => {
 
   const handleIsEditable = (boolean: boolean) => {
     setIsEditable(boolean);
+    editor?.setEditable(boolean);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (editor?.isEmpty) setContentError('Content is required');
+    if (title === '') setContentError('Title is required');
+    if (editor?.isEmpty || title === '') return;
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/post/${post.id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          content,
+        }),
+      }
+    );
+    const data = await response.json();
+
+    handleIsEditable(false);
+    setTitle(data.title);
+    setContent(data.content);
   };
 
   return (
@@ -55,13 +92,21 @@ const Content = ({ post }: Props) => {
         post={post}
         isEditable={isEditable}
         handleIsEditable={handleIsEditable}
+        tempTitle={tempTitle}
+        setTempTitle={setTempTitle}
+        tempContent={tempContent}
+        setTempContent={setTempContent}
       />
-      <form action="">
+      <form onSubmit={handleSubmit}>
         {/* Header */}
         <div>
           {isEditable ? (
             <div>
-              <textarea className="w-full bg-wh-50 border-2 rounded-md p-3" />
+              <textarea
+                value={title}
+                onChange={handleOnChangeTitle}
+                className="w-full bg-wh-50 border-2 rounded-md p-3"
+              />
             </div>
           ) : (
             <h3 className="font-bold text-3xl mt-3">{post.title}</h3>
@@ -81,7 +126,11 @@ const Content = ({ post }: Props) => {
           />
         </div>
         {/* Body */}
-        <Article editor={editor} isEditable={isEditable} />
+        <Article
+          editor={editor}
+          isEditable={isEditable}
+          contentError={contentError}
+        />
         {isEditable && (
           <div className="flex justify-end">
             <button

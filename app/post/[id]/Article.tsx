@@ -6,9 +6,10 @@ import EditorMenuBar from './EditorMenuBar';
 type Props = {
   editor: Editor | null;
   isEditable: boolean;
+  contentError: string;
 };
 
-const Article = ({ editor, isEditable }: Props) => {
+const Article = ({ editor, isEditable, contentError }: Props) => {
   return (
     <article className="text-wh-500 leading-8">
       {isEditable && (
@@ -37,6 +38,9 @@ const Article = ({ editor, isEditable }: Props) => {
         )}
         <EditorContent editor={editor} />
       </div>
+      {contentError && (
+        <p className="text-accent-red text-xs mt-2">{contentError}</p>
+      )}
     </article>
   );
 };

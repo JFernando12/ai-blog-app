@@ -6,17 +6,31 @@ type Props = {
   post: PostFormatted;
   isEditable?: boolean;
   handleIsEditable: (isEditable: boolean) => void;
+  tempTitle: string;
+  setTempTitle: (tempTitle: string) => void;
+  tempContent: string;
+  setTempContent: (tempContent: string) => void;
 };
 
-const CategoryAndEdit = ({ post, isEditable, handleIsEditable }: Props) => {
+const CategoryAndEdit = ({
+  post,
+  isEditable,
+  handleIsEditable,
+  tempTitle,
+  tempContent,
+  setTempTitle,
+  setTempContent,
+}: Props) => {
   const handleEnableEditing = () => {
-    console.log('Enable editing');
     handleIsEditable(true);
+    setTempTitle(post.title);
+    setTempContent(post.content);
   };
 
   const handleDisableEditing = () => {
-    console.log('Disable editing');
     handleIsEditable(false);
+    setTempTitle('');
+    setTempContent('');
   };
 
   return (
