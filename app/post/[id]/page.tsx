@@ -2,6 +2,7 @@ import React from 'react';
 import Content from './Content';
 import { prisma } from '@/app/api/clients';
 import { PostFormatted } from '@/app/types';
+import Sidebar from '@/app/(shared)/Sidebar';
 
 type Props = {
   params: { id: string };
@@ -34,8 +35,13 @@ const Post = async ({ params }: Props) => {
   }
 
   return (
-    <main className="px-10 leading-7">
-      <Content post={post} />
+    <main className="md:flex px-10 leading-7 gap-10 mb-5">
+      <div className="basis-3/4">
+        <Content post={post} />
+      </div>
+      <div className="basis-1/4">
+        <Sidebar />
+      </div>
     </main>
   );
 };
