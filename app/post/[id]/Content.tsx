@@ -130,6 +130,8 @@ const Content = ({ post }: Props) => {
           editor={editor}
           isEditable={isEditable}
           contentError={contentError}
+          title={title}
+          setContent={setContent}
         />
         {isEditable && (
           <div className="flex justify-end">

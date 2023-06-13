@@ -1,15 +1,41 @@
 import { RocketLaunchIcon } from '@heroicons/react/24/solid';
 import { Editor, EditorContent } from '@tiptap/react';
-import React from 'react';
+import React, { useState } from 'react';
 import EditorMenuBar from './EditorMenuBar';
 
 type Props = {
   editor: Editor | null;
   isEditable: boolean;
   contentError: string;
+  title: string;
+  setContent: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Article = ({ editor, isEditable, contentError }: Props) => {
+const Article = ({
+  editor,
+  isEditable,
+  contentError,
+  title,
+  setContent,
+}: Props) => {
+  const [role, setRole] = useState('I am a hepful writer.');
+
+  const postAiContent = async () => {
+    if (!editor) return null;
+    editor.chain().focus().setContent('Generating text, please wait...').run();
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/openai`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ title, role }),
+    });
+    const data = await response.json();
+
+    editor.chain().focus().setContent(data.content).run();
+    setContent(data.content);
+  };
+
   return (
     <article className="text-wh-500 leading-8">
       {isEditable && (
@@ -20,8 +46,10 @@ const Article = ({ editor, isEditable, contentError }: Props) => {
             <input
               placeholder="Role"
               className="border-2 rounded-md w-full bg-wh-50 px-3 py-1"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
             />
-            <button>
+            <button type="button" onClick={postAiContent}>
               <RocketLaunchIcon className="h-8 w-8 text-accent-orange hover:text-wh-300" />
             </button>
           </div>
